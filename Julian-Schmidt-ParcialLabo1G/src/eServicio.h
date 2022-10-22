@@ -21,5 +21,6 @@ typedef struct {
 
 void mostrarUnServicio(eServicio servicio);
 int mostrarTodosServicio(eServicio *lista, int tam);
+int encontrarServicioPorId(eServicio *lista, int tam, int id);
 
 #endif /* ESERVICIO_H_ */

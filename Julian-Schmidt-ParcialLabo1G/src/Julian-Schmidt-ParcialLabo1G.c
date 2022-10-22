@@ -16,6 +16,7 @@
 #include "eTipo.h"
 #include "inputs.h"
 #include "eServicio.h"
+#include "eTrabajo.h"
 #define MAX_REINTENTOS 9999
 
 int main(void) {
@@ -32,12 +33,17 @@ int main(void) {
 
 	int auxIdMarca;
 	int auxIdTipo;
-
 	eNotebook nuevaNotebook;
 	int idNotebook;
 	int confirmarSalida;
+	int auxIdNotebook;
+	int auxIdServicio;
+	eTrabajo nuevoTrabajo;
+	eTrabajo trabajos[MAX_TRABAJOS];
+	int idTrabajo;
 
-	if (!abm_inicializarNotebook(notebooks, MAX_NOTEBOOKS)) {
+	if (!abm_inicializarNotebook(notebooks, MAX_NOTEBOOKS)
+			|| !abm_inicializarTrabajo(trabajos, MAX_TRABAJOS)) {
 		puts("\n ----------- OCURRIO UN ERROR AL INICIALIZAR ------------");
 	}
 
@@ -96,18 +102,25 @@ int main(void) {
 			}
 			break;
 		case 2:
-			abm_listadoModificacionNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS);
+			if (!abm_listadoModificacionNotebook(notebooks, MAX_NOTEBOOKS,
+					marcas,
+					MAX_MARCAS, tipos, MAX_TIPOS)) {
+				puts("\n ---- NO ES POSIBLE MODIFICAR NOTEBOOKS ---- ");
+			}
 			break;
 		case 3:
-			abm_listadoBajaNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS);
+			if (!abm_listadoBajaNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+			MAX_MARCAS, tipos, MAX_TIPOS)) {
+				puts("\n ---- NO ES POSIBLE DAR DE BAJA NOTEBOOKS ---- ");
+			}
 			break;
 		case 4:
 			ordenarNotebooksMarcaPrecio(notebooks, MAX_NOTEBOOKS, marcas,
 			MAX_MARCAS);
-			abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS);
+			if (!abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+			MAX_MARCAS, tipos, MAX_TIPOS)) {
+				puts("\n ---- NO ES POSIBLE MOSTRAR NOTEBOOKS ---- ");
+			}
 			break;
 		case 5:
 			mostrarTodosMarca(marcas, MAX_MARCAS);
@@ -119,10 +132,60 @@ int main(void) {
 			mostrarTodosServicio(servicios, MAX_SERVICIOS);
 			break;
 		case 8:
-			puts("\nAlta trabajo");
+			if (abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+			MAX_MARCAS, tipos, MAX_TIPOS)) {
+				utn_getNumero(&auxIdNotebook,
+						"\nIngrese el id de la notebook: ",
+						"\nError, ingrese el id de la notebook", 1, 9999,
+						MAX_REINTENTOS);
+
+				while (abm_encontrarNotebookPorId(notebooks, MAX_NOTEBOOKS,
+						auxIdNotebook) == -1) {
+					puts("\nEL ID NO EXISTE");
+					utn_getNumero(&auxIdNotebook,
+							"\nIngrese el id de la notebook: ",
+							"\nError, ingrese el id de la notebook", 1, 9999,
+							MAX_REINTENTOS);
+				}
+				nuevoTrabajo.idNotebook = auxIdNotebook;
+
+				mostrarTodosServicio(servicios, MAX_SERVICIOS);
+				utn_getNumero(&auxIdServicio, "\nIngrese el id de servicio: ",
+						"\nError. Ingrese el id de servicio: ", 20000, 30000,
+						MAX_REINTENTOS);
+
+				while (encontrarServicioPorId(servicios, MAX_SERVICIOS,
+						auxIdServicio) == -1) {
+					puts("\nEL ID NO EXISTE");
+					utn_getNumero(&auxIdServicio,
+							"\nIngrese el id de servicio: ",
+							"\nError. Ingrese el id de servicio: ", 20000,
+							30000,
+							MAX_REINTENTOS);
+				}
+				nuevoTrabajo.idServicio = auxIdServicio;
+				utn_getNumero(&nuevoTrabajo.fecha.dia, "\nIngrese el dia: ",
+						"\nError. Ingrese el dia: ", 1, 31, 9999);
+				utn_getNumero(&nuevoTrabajo.fecha.mes, "\nIngrese el mes: ",
+						"\nError. Ingrese el mes: ", 1, 12, 9999);
+				utn_getNumero(&nuevoTrabajo.fecha.anio, "\nIngrese el anio: ",
+						"\nError. Ingrese el anio: ", 2022, 2022, 9999);
+
+				idTrabajo = abm_obtenerIdTrabajo();
+				if (abm_altaTrabajo(trabajos, MAX_TRABAJOS, idTrabajo,
+						nuevoTrabajo)) {
+					puts("\n ALTA EXITOSA");
+				} else {
+					puts("\n\n ---- OCURRIO UN ERROR EN EL ALTA  ---- ");
+				}
+			} else {
+				puts(
+						"\n\n --- NO ES POSIBLE DAR DE ALTA TRABAJOS, NO HAY NOTEBOOKS -----");
+			}
 			break;
 		case 9:
-			puts("\nListar trabajos");
+			abm_mostrarTodosTrabajo(trabajos, MAX_TRABAJOS, notebooks,
+			MAX_NOTEBOOKS, servicios, MAX_SERVICIOS);
 			break;
 		case 10:
 			utn_getNumero(&confirmarSalida,

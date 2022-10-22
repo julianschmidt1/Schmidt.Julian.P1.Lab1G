@@ -31,3 +31,19 @@ int mostrarTodosServicio(eServicio *lista, int tam) {
 	return rtn;
 }
 
+int encontrarServicioPorId(eServicio *lista, int tam, int id) {
+	int rtn = -1;
+	int i;
+
+	if (lista != NULL && tam > 0) {
+		for (i = 0; i < tam; i++) {
+			if (lista[i].id == id) {
+				rtn = i;
+				break;
+			}
+		}
+	}
+
+	return rtn;
+}
+

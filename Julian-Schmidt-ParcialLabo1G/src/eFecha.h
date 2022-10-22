@@ -11,7 +11,7 @@
 typedef struct {
 	int dia;
 	int mes;
-	int año;
+	int anio;
 } eFecha;
 
 #endif /* EFECHA_H_ */

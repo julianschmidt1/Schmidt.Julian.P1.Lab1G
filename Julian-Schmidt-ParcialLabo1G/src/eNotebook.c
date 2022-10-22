@@ -198,9 +198,8 @@ eNotebook abm_modificacionNotebook(eNotebook Notebook, eMarca *marcas,
 		switch (opcionSeleccionada) {
 		case 1:
 			utn_getNumeroDecimal(&auxiliar.precio,
-					"\nIngrese el nombre de la notebook: ",
-					"\nError. Reingrese el nombre de la notebook: ", 0, 999999,
-					9999);
+					"\nIngrese el precio de la notebook: ",
+					"\nError. Reingrese el precio notebook: ", 0, 999999, 9999);
 			break;
 		case 2:
 			mostrarTodosTipo(tipos, tamTipos);
