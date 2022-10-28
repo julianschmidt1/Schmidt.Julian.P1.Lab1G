@@ -49,7 +49,7 @@ int abm_altaNotebook(eNotebook *lista, int tam, int id, eNotebook Notebook);
 /// \return retorna 1 en caso de exito y cero en caso de error
 int abm_inicializarNotebook(eNotebook *lista, int tam);
 
-/// \briefFuncion que retorna un identificar univoco autoincremental
+/// \brief Funcion que retorna un identificar univoco autoincremental
 ///
 /// \return Valor utilizado como identificador
 int abm_obtenerIdNotebook(void);
@@ -57,7 +57,7 @@ int abm_obtenerIdNotebook(void);
 ///
 /// \param lista array de eNotebook
 /// \param tam tamaño del array de eNotebook
-/// \return
+/// \return retorna el indice en caso de encontrarlo y -1 en caso de no encontrarlo o error
 int abm_obtenerIndiceLibreNotebook(eNotebook *lista, int tam);
 // ENCONTRAR INDICE -----------------------------------------
 /// \brief Funcion que itera un array de eNotebook, y busca el indice especificado

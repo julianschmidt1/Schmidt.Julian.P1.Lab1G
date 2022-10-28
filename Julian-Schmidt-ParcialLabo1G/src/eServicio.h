@@ -19,8 +19,24 @@ typedef struct {
 	float precio;
 } eServicio;
 
+/// \brief Funcion que muestra una estructura de tipo eServicio
+///
+/// \param estructura eServicio a mostrar
 void mostrarUnServicio(eServicio servicio);
+
+/// \brief Funcion que itera una lista de eServicio
+///
+/// \param lista array de eServicio
+/// \param tam tamaño del array
+/// \return retorna 1 si pudo mostrar exitosamente y 0 si hubo un error
 int mostrarTodosServicio(eServicio *lista, int tam);
+
+/// \brief Funcion que obtiene el indice del id a buscar en el array de eServicio
+///
+/// \param lista array de eServicio
+/// \param tam tamaño del array
+/// \param id a buscar
+/// \return Retorna el indice obtenido en caso de exito y -1 si no se encuentra o error
 int encontrarServicioPorId(eServicio *lista, int tam, int id);
 
 #endif /* ESERVICIO_H_ */
