@@ -41,6 +41,9 @@ int main(void) {
 	eTrabajo nuevoTrabajo;
 	eTrabajo trabajos[MAX_TRABAJOS];
 	int idTrabajo;
+	int contadorAltasNotebooks = 0;
+	int contadorBajasNotebooks = 0;
+	int contadorAltasTrabajo = 0;
 
 	if (!abm_inicializarNotebook(notebooks, MAX_NOTEBOOKS)
 			|| !abm_inicializarTrabajo(trabajos, MAX_TRABAJOS)) {
@@ -97,28 +100,40 @@ int main(void) {
 			if (abm_altaNotebook(notebooks, MAX_NOTEBOOKS, idNotebook,
 					nuevaNotebook)) {
 				puts("\n ALTA EXITOSA");
+				contadorAltasNotebooks++;
 			} else {
 				puts("\n\n ---- OCURRIO UN ERROR EN EL ALTA  ---- ");
 			}
 			break;
 		case 2:
-			if (!abm_listadoModificacionNotebook(notebooks, MAX_NOTEBOOKS,
-					marcas,
-					MAX_MARCAS, tipos, MAX_TIPOS)) {
+			if (validarIngresoOpciones(contadorAltasNotebooks,
+					contadorBajasNotebooks)) {
+				abm_listadoModificacionNotebook(notebooks, MAX_NOTEBOOKS,
+						marcas,
+						MAX_MARCAS, tipos, MAX_TIPOS);
+				puts("\n --- MODIFICACION EXITOSA ---- \n");
+			} else {
 				puts("\n ---- NO ES POSIBLE MODIFICAR NOTEBOOKS ---- ");
 			}
 			break;
 		case 3:
-			if (!abm_listadoBajaNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS)) {
+			if (validarIngresoOpciones(contadorAltasNotebooks,
+					contadorBajasNotebooks)) {
+				abm_listadoBajaNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+				MAX_MARCAS, tipos, MAX_TIPOS);
+				contadorBajasNotebooks++;
+			} else {
 				puts("\n ---- NO ES POSIBLE DAR DE BAJA NOTEBOOKS ---- ");
 			}
 			break;
 		case 4:
-			ordenarNotebooksMarcaPrecio(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS);
-			if (!abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS)) {
+			if (validarIngresoOpciones(contadorAltasNotebooks,
+					contadorBajasNotebooks)) {
+				ordenarNotebooksMarcaPrecio(notebooks, MAX_NOTEBOOKS, marcas,
+				MAX_MARCAS);
+				abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+				MAX_MARCAS, tipos, MAX_TIPOS);
+			} else {
 				puts("\n ---- NO ES POSIBLE MOSTRAR NOTEBOOKS ---- ");
 			}
 			break;
@@ -132,8 +147,10 @@ int main(void) {
 			mostrarTodosServicio(servicios, MAX_SERVICIOS);
 			break;
 		case 8:
-			if (abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
-			MAX_MARCAS, tipos, MAX_TIPOS)) {
+			if (validarIngresoOpciones(contadorAltasNotebooks,
+					contadorBajasNotebooks)) {
+				abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+				MAX_MARCAS, tipos, MAX_TIPOS);
 				utn_getNumero(&auxIdNotebook,
 						"\nIngrese el id de la notebook: ",
 						"\nError, ingrese el id de la notebook", 1, 9999,
@@ -184,8 +201,13 @@ int main(void) {
 			}
 			break;
 		case 9:
-			abm_mostrarTodosTrabajo(trabajos, MAX_TRABAJOS, notebooks,
-			MAX_NOTEBOOKS, servicios, MAX_SERVICIOS);
+			if (contadorAltasTrabajo > 0) {
+				abm_mostrarTodosTrabajo(trabajos, MAX_TRABAJOS, notebooks,
+				MAX_NOTEBOOKS, servicios, MAX_SERVICIOS);
+			} else {
+				puts(
+						"\n --- NO ES POSIBLE MOSTRAR EL LISTADO, NO HAY TRABAJOS -----");
+			}
 			break;
 		case 10:
 			utn_getNumero(&confirmarSalida,
