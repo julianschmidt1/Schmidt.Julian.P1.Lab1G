@@ -223,7 +223,9 @@ int main(void) {
 										"4. MOSTRAR UN LISTADO DE LAS NOTEBOOKS SEPARADAS POR MARCA\n"
 										"5. ELEGIR UN TIPO Y UNA MARCA Y CONTAR CUANTAS NOTEBOOKS HAY DE ESE TIPO Y MARCA\n"
 										"6. MOSTRAR LA O LAS MARCAS MAS ELEGIDAS POR LOS CLIENTES.\n"
-										"7. SALIR\n",
+										"7. MOSTRAR NOTEBOOK JUNTO CON SUS TRABAJOS\n"
+										"8. MOSTRAR SUMATORIA DE PRECIO DE SERVICIOS"
+										"11. VOLVER AL MENU PRINCIPAL\n",
 								"\nError. Reingrese la opcion: ", 1, 11);
 				switch (opcionMenuInformes) {
 				case 1:
