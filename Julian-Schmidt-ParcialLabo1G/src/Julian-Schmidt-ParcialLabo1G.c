@@ -17,6 +17,7 @@
 #include "inputs.h"
 #include "eServicio.h"
 #include "eTrabajo.h"
+#include "rInformes.h"
 #define MAX_REINTENTOS 9999
 
 int main(void) {
@@ -44,6 +45,7 @@ int main(void) {
 	int contadorAltasNotebooks = 0;
 	int contadorBajasNotebooks = 0;
 	int contadorAltasTrabajo = 0;
+	int opcionMenuInformes;
 
 	if (!abm_inicializarNotebook(notebooks, MAX_NOTEBOOKS)
 			|| !abm_inicializarTrabajo(trabajos, MAX_TRABAJOS)) {
@@ -61,8 +63,9 @@ int main(void) {
 						"7. LISTAR SERVICIOS\n"
 						"8. ALTA TRABAJO\n"
 						"9. LISTAR TRABAJOS\n"
-						"10. SALIR\n",
-				"\nError. Opcion invalida, ingrese la opcion: ", 1, 10);
+						"10. INFORMES\n"
+						"11. SALIR\n",
+				"\nError. Opcion invalida, ingrese la opcion: ", 1, 11);
 		switch (opcion) {
 		case 1:
 			utn_getString("\nIngrese el modelo: ",
@@ -192,6 +195,7 @@ int main(void) {
 				if (abm_altaTrabajo(trabajos, MAX_TRABAJOS, idTrabajo,
 						nuevoTrabajo)) {
 					puts("\n ALTA EXITOSA");
+					contadorAltasTrabajo++;
 				} else {
 					puts("\n\n ---- OCURRIO UN ERROR EN EL ALTA  ---- ");
 				}
@@ -210,6 +214,137 @@ int main(void) {
 			}
 			break;
 		case 10:
+			do {
+				opcionMenuInformes =
+						menu_opciones("\n------ MENU PRINCIPAL -----",
+								"\n1. MOSTRAR NOTEBOOKS DE TIPO SELECCIONADO POR USUARIO: \n"
+										"2. MOSTRAR NOTEBOOKS DE UNA MARCA SELECCIONADA\n"
+										"3. INFORMAS LA O LAS NOTEBOOKS MAS BARATAS\n"
+										"4. MOSTRAR UN LISTADO DE LAS NOTEBOOKS SEPARADAS POR MARCA\n"
+										"5. ELEGIR UN TIPO Y UNA MARCA Y CONTAR CUANTAS NOTEBOOKS HAY DE ESE TIPO Y MARCA\n"
+										"6. MOSTRAR LA O LAS MARCAS MAS ELEGIDAS POR LOS CLIENTES.\n"
+										"7. SALIR\n",
+								"\nError. Reingrese la opcion: ", 1, 11);
+				switch (opcionMenuInformes) {
+				case 1:
+					mostrarTodosTipo(tipos, MAX_TIPOS);
+					utn_getNumero(&auxIdTipo, "\nIngrese el id del tipo: ",
+							"\n ID de tipo invalido", 5000, 9999,
+							MAX_REINTENTOS);
+
+					while (encontrarTipoPorId(tipos, MAX_TIPOS, auxIdTipo) == -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdTipo, "\nIngrese el id del tipo: ",
+								"\n ID de tipo invalido", 5000, 9999,
+								MAX_REINTENTOS);
+					}
+					informe_mostrarNotebooksDeTipoSeleccionado(notebooks,
+					MAX_NOTEBOOKS, auxIdTipo, marcas, MAX_MARCAS, tipos,
+					MAX_TIPOS);
+					break;
+				case 2:
+					mostrarTodosMarca(marcas, MAX_MARCAS);
+					utn_getNumero(&auxIdMarca, "\nIngrese el id de la marca: ",
+							"\n ID de marca invalido", 1000, 9999,
+							MAX_REINTENTOS);
+
+					while (encontrarMarcaPorId(marcas, MAX_MARCAS, auxIdMarca)
+							== -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdMarca,
+								"\nIngrese el id de la marca: ",
+								"\n ID de marca invalido", 1000, 9999,
+								MAX_REINTENTOS);
+					}
+					informe_mostrarNotebooksDeMarcaSeleccionada(notebooks,
+					MAX_NOTEBOOKS, auxIdMarca, marcas, MAX_MARCAS, tipos,
+					MAX_TIPOS);
+					break;
+				case 3:
+					informe_mostrarNotebooksMasBarata(notebooks, MAX_NOTEBOOKS,
+							tipos, MAX_TIPOS, marcas, MAX_MARCAS);
+					break;
+				case 4:
+					informe_mostrarNotebooksPorMarca(notebooks, MAX_NOTEBOOKS,
+							marcas, MAX_MARCAS, tipos, MAX_TIPOS);
+					break;
+				case 5:
+					mostrarTodosTipo(tipos, MAX_TIPOS);
+					utn_getNumero(&auxIdTipo, "\nIngrese el id del tipo: ",
+							"\n ID de tipo invalido", 5000, 9999,
+							MAX_REINTENTOS);
+
+					while (encontrarTipoPorId(tipos, MAX_TIPOS, auxIdTipo) == -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdTipo, "\nIngrese el id del tipo: ",
+								"\n ID de tipo invalido", 5000, 9999,
+								MAX_REINTENTOS);
+					}
+					mostrarTodosMarca(marcas, MAX_MARCAS);
+					utn_getNumero(&auxIdMarca, "\nIngrese el id de la marca: ",
+							"\n ID de marca invalido", 1000, 9999,
+							MAX_REINTENTOS);
+
+					while (encontrarMarcaPorId(marcas, MAX_MARCAS, auxIdMarca)
+							== -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdMarca,
+								"\nIngrese el id de la marca: ",
+								"\n ID de marca invalido", 1000, 9999,
+								MAX_REINTENTOS);
+					}
+					informe_mostrarNotebookPorMarcaYTipo(notebooks, MAX_MARCAS,
+							auxIdMarca, auxIdTipo, marcas, MAX_MARCAS, tipos,
+							MAX_TIPOS);
+					break;
+				case 6:
+					informe_mostrarMarcaMasElegida(notebooks, MAX_NOTEBOOKS,
+							marcas, MAX_MARCAS);
+					break;
+				case 7:
+					abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+					MAX_MARCAS, tipos, MAX_TIPOS);
+					utn_getNumero(&auxIdNotebook,
+							"\nIngrese el id de la notebook: ",
+							"\n ID de tipo invalido", 1, 9999,
+							MAX_REINTENTOS);
+
+					while (abm_encontrarNotebookPorId(notebooks, MAX_NOTEBOOKS,
+							auxIdNotebook) == -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdNotebook,
+								"\nIngrese el id de la notebook: ",
+								"\n ID de tipo invalido", 1, 9999,
+								MAX_REINTENTOS);
+					}
+					informe_mostrarTrabajosSobreNotebook(trabajos,
+					MAX_TRABAJOS, servicios, MAX_SERVICIOS, auxIdNotebook,
+							notebooks, MAX_NOTEBOOKS);
+					break;
+				case 8:
+					abm_mostrarTodosNotebook(notebooks, MAX_NOTEBOOKS, marcas,
+					MAX_MARCAS, tipos, MAX_TIPOS);
+					utn_getNumero(&auxIdNotebook,
+							"\nIngrese el id de la notebook: ",
+							"\n ID de tipo invalido", 1, 9999,
+							MAX_REINTENTOS);
+
+					while (abm_encontrarNotebookPorId(notebooks, MAX_NOTEBOOKS,
+							auxIdNotebook) == -1) {
+						puts("\nEL ID INGRESADO NO EXISTE");
+						utn_getNumero(&auxIdNotebook,
+								"\nIngrese el id de la notebook: ",
+								"\n ID de tipo invalido", 1, 9999,
+								MAX_REINTENTOS);
+					}
+					informe_sumaDeImportesServicios(trabajos, MAX_TRABAJOS,
+							servicios, MAX_SERVICIOS, idNotebook, notebooks,
+							MAX_NOTEBOOKS);
+					break;
+				}
+			} while (opcionMenuInformes != 11);
+			break;
+		case 11:
 			utn_getNumero(&confirmarSalida,
 					"\nEsta seguro que desea salir del programa? (1. SI | 0. NO) \nIngrese la opcion: ",
 					"\nError. Opcion ingresada invalida. Intentelo nuevamente",
@@ -221,7 +356,7 @@ int main(void) {
 			}
 			break;
 		}
-	} while (opcion != 10 || !confirmarSalida);
+	} while (opcion != 11 || !confirmarSalida);
 
 	return EXIT_SUCCESS;
 }

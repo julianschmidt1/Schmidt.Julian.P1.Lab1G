@@ -17,7 +17,7 @@
 #define BAJA 1
 #define OCUPADO -1
 #define MAX_DESCRIPCION 20
-#define MAX_TRABAJOS 50
+#define MAX_TRABAJOS 10
 
 typedef struct {
 	int id;
